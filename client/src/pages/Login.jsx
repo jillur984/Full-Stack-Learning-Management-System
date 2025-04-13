@@ -1,3 +1,5 @@
+// JmceyNTcJjuHvvA1
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -28,6 +30,11 @@ const Login = () => {
     } else {
       setLoginInput({ ...loginInput, [name]: value });
     }
+  };
+
+  const handleRegistration = (type) => {
+    const inputData = type === "signup" ? signupInput : loginInput;
+    console.log(inputData);
   };
 
   return (
@@ -81,7 +88,9 @@ const Login = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Signup</Button>
+              <Button onClick={() => handleRegistration("signup")}>
+                Signup
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -96,6 +105,9 @@ const Login = () => {
                 <Label htmlFor="current">Email</Label>
                 <Input
                   type="email"
+                  name="email"
+                  value={loginInput.email}
+                  onChange={(e) => inputChangeHandler(e, "login")}
                   placeholder="Enter your Email here"
                   required="true"
                 />
@@ -104,6 +116,9 @@ const Login = () => {
                 <Label htmlFor="new">Password</Label>
                 <Input
                   id="new"
+                  name="password"
+                  value={loginInput.password}
+                  onChange={(e) => inputChangeHandler(e, "login")}
                   type="password"
                   placeholder="Enter your Password here"
                   required="true"
@@ -111,7 +126,7 @@ const Login = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button>login</Button>
+              <Button onClick={() => handleRegistration("login")}>login</Button>
             </CardFooter>
           </Card>
         </TabsContent>
