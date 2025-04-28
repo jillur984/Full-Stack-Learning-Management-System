@@ -79,3 +79,28 @@ export const login = async (req, res) => {
     });
   }
 };
+
+// logout
+
+export const Logout = async (req, res) => {
+  try {
+    return res.status(200).cookie("token", "", { maxAge: 0 }).json({
+      message: "Logged out successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Logout has failed",
+    });
+  }
+};
+
+export const getUserProfile = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    
+  }
+};
