@@ -1,5 +1,5 @@
 import { Menu, School } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -26,10 +26,26 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import DarkMode from "@/DarkMode";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLogoutUserMutation } from "@/features/authApi";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const user = true;
+  const navigate = useNavigate();
+
+  const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
+
+  const handleLogout = async () => {
+    await logoutUser();
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data?.message || "Logout success");
+      navigate("/login");
+    }
+  }, [isSuccess]);
 
   return (
     <div className="h-16 dark:bg-[#0A0A0A] bg-white border-b dark:border-gray-800 border-gray-200 fixed left-0 right-0 top-0 ">
@@ -63,8 +79,12 @@ const Navbar = () => {
                     <Link to="my-learning">My Learning</Link>
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem>Edit Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Logout</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="/profile">Edit Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout}>
+                    Logout
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Dashboard</DropdownMenuItem>
                 </DropdownMenuGroup>
@@ -82,7 +102,7 @@ const Navbar = () => {
       {/* // mobile device */}
       <div className="flex md:hidden items-center justify-between px-4 h-full">
         <h1 className="font-extrabold text-2xl">E-learning</h1>
-        <MobileDevice user={user} />
+        <MobileDevice user={user} logout={handleLogout} />
       </div>
     </div>
   );
@@ -90,7 +110,7 @@ const Navbar = () => {
 
 export default Navbar;
 
-export const MobileDevice = () => {
+export const MobileDevice = ({ logout }) => {
   const role = "instructor";
   return (
     <div className="h-10">

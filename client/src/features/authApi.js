@@ -23,6 +23,7 @@ export const authApi = createApi({
         method: "POST",
         body: inputData,
       }),
+
       async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
@@ -32,7 +33,41 @@ export const authApi = createApi({
         }
       },
     }),
+    logoutUser: builder.mutation({
+      query: () => ({
+        url: "logout",
+        method: "POST",
+      }),
+    }),
+    loadUser: builder.query({
+      query: () => ({
+        url: "profile",
+        method: "GET",
+      }),
+      async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          dispatch(userLoggedIn({ user: result.data.user }));
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    }),
+
+    updateUser: builder.mutation({
+      query: (formData) => ({
+        url: "profile/update",
+        method: "PUT",
+        body: formData, // ei jaygay body na diye data disilam. sei akta error khaisilam. matha dorse ekhane
+      }),
+    }),
   }),
 });
 
-export const { useLoginUserMutation, useRegisterUserMutation } = authApi;
+export const {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+  useLoadUserQuery,
+  useUpdateUserMutation,
+  useLogoutUserMutation,
+} = authApi;
