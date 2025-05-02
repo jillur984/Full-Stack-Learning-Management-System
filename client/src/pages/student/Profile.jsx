@@ -20,7 +20,7 @@ import { toast } from "sonner";
 const Profile = () => {
   const [name, setName] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
-  const { data, isLoading } = useLoadUserQuery();
+  const { data, isLoading, refetch } = useLoadUserQuery();
   const [
     updateUser,
     { data: updateUserData, isLoading: updateUserIsLoading, isSuccess, error },
@@ -30,18 +30,19 @@ const Profile = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      refetch();
       toast.success(data.message || "Profile updated");
     }
     if (error) {
       toast.error(error.message || "updated failed to profile");
     }
-  }, [error, data, isSuccess]);
+  }, [error, updateUserData, isSuccess]);
 
   if (isLoading) {
     return <h1>Profile is Loading....</h1>;
   }
 
-  const { user } = data;
+  const user = data && data.user;
 
   const onImageChangeHandler = (e) => {
     const file = e.target.files?.[0];
@@ -126,12 +127,16 @@ const Profile = () => {
                 </div>
               </div>
               <DialogFooter>
-                <Button onClick={handleProfileChange}>
+                <Button
+                  disabled={updateUserIsLoading}
+                  onClick={handleProfileChange}
+                >
                   <>
-                    {isLoading ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin">
+                    {updateUserIsLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Please wait
-                      </Loader2>
+                      </>
                     ) : (
                       "Save Changes"
                     )}

@@ -29,9 +29,16 @@ import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogoutUserMutation } from "@/features/authApi";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  const user = true;
+  // const user = true; // at first i keep it static
+
+  // after that we user came from store
+
+  const { user } = useSelector((store) => store.auth);
+
+  console.log(user);
   const navigate = useNavigate();
 
   const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
@@ -65,7 +72,7 @@ const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <Avatar>
                   <AvatarImage
-                    src="https://github.com/shadcn.png"
+                    src={user?.photoUrl || "https://github.com/shadcn.png"}
                     alt="@shadcn"
                   />
                   <AvatarFallback>CN</AvatarFallback>
