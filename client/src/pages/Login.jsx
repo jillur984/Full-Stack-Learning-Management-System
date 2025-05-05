@@ -79,7 +79,7 @@ const Login = () => {
       navigate("/");
     }
     if (loginError) {
-      toast.error(loginData.data.message || "login failed");
+      toast.error(loginData?.data?.message || "login failed");
     }
   }, [registerIsLoading, loginIsLoading, registerData, loginData]);
 

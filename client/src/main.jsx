@@ -7,6 +7,7 @@ import { appStore } from "./app/store";
 import { Toaster } from "./components/ui/sonner";
 import { useLoadUserQuery } from "./features/authApi";
 import LoadingSpinner from "./components/LoadingSpinner";
+
 const Custom = ({ children }) => {
   const { isLoading } = useLoadUserQuery();
   return <>{isLoading ? <LoadingSpinner /> : <>{children}</>}</>;

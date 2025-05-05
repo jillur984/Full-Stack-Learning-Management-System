@@ -47,6 +47,7 @@ export const authApi = createApi({
       },
     }),
     loadUser: builder.query({
+      // i want to get profile info
       query: () => ({
         url: "profile",
         method: "GET",
