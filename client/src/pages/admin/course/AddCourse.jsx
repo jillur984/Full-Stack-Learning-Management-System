@@ -9,12 +9,48 @@ import {
   SelectLabel,
   SelectTrigger,
 } from "@/components/ui/select";
+import { useCreateCourseMutation } from "@/features/courseApi";
 import { SelectValue } from "@radix-ui/react-select";
-import React from "react";
+import { Loader2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const AddCourse = () => {
   const navigate = useNavigate();
+
+  const [courseTitle, setCourseTitle] = useState("");
+  const [category, setCategory] = useState("");
+
+  const [createCourse, { data, error, isLoading, isSuccess }] =
+    useCreateCourseMutation();
+
+  if (!data) {
+    console.log("Data integrate problem");
+  }
+
+  console.log(data);
+
+  console.log({ courseTitle, category });
+
+  const createCourseHandler = async () => {
+    await createCourse({ courseTitle, category });
+  };
+
+  const getSelectedCategory = (value) => {
+    setCategory(value);
+  };
+
+  // for displaying toast message
+
+  // for displaying toast
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data?.message || "Course created.");
+      navigate("/admin/course");
+    }
+  }, [isSuccess, error]);
+
   return (
     <div className="flex-1 mx-10">
       <div className="mb-4">
@@ -29,11 +65,16 @@ const AddCourse = () => {
 
       <div className="space-y-4">
         <Label className="space-y-2 mb-2">Title</Label>
-        <Input type="text" placeholder="Your Course Name" />
+        <Input
+          type="text"
+          placeholder="Your Course Name"
+          value={courseTitle}
+          onChange={(e) => setCourseTitle(e.target.value)}
+        />
       </div>
       <div>
         <Label className="mt-2 mb-2">Category</Label>
-        <Select>
+        <Select onValueChange={getSelectedCategory}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
@@ -60,9 +101,18 @@ const AddCourse = () => {
           </SelectContent>
         </Select>
       </div>
-      <div className="mt-3 gap-2 flex ">
-        <Button>Cancel</Button>
-        <Button onClick={() => navigate("/admin/course")}>Create</Button>
+      <div className="mt-3 gap-2 flex items-center ">
+        <Button onClick={() => navigate("/admin/course")}>Back</Button>
+        <Button disabled={isLoading} onClick={createCourseHandler}>
+          {isLoading ? (
+            <>
+              <Loader2 className=" h-4 animate-spin" />
+              Please wait
+            </>
+          ) : (
+            "Create"
+          )}
+        </Button>
       </div>
     </div>
   );
