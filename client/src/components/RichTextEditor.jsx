@@ -1,42 +1,15 @@
-import React, { useCallback, useState } from "react";
-import {
-  BoldExtension,
-  ItalicExtension,
-  UnderlineExtension,
-} from "remirror/extensions";
-import { Remirror, useRemirror } from "@remirror/react";
+import { Textarea } from "@/components/ui/textarea";
 
-const RichTextEditor = () => {
-  const extensions = useCallback(
-    () => [
-      new BoldExtension(),
-      new ItalicExtension(),
-      new UnderlineExtension(),
-    ],
-    []
-  );
-
-  const { manager, state, onChange } = useRemirror({
-    extensions,
-    content: "<p>This is the initial value</p>",
-    stringHandler: "html",
-  });
-
-  const [value, setValue] = useState("<p>This is the initial value</p>");
-
-  const handleChange = useCallback(({ helpers }) => {
-    const html = helpers.getHTML();
-    setValue(html);
-  }, []);
+export function RichTextEditor({ input, setInput }) {
+  const handleChange = (e) => {
+    setInput({ ...input, description: e.target.value });
+  };
 
   return (
-    <Remirror
-      manager={manager}
-      state={state}
+    <Textarea
+      value={input.description || ""}
       onChange={handleChange}
-      autoFocus
+      placeholder="Type your message here."
     />
   );
-};
-
-export default RichTextEditor;
+}
