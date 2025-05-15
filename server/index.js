@@ -28,7 +28,7 @@ app.use(
 // apis
 
 app.use("/api/v1/user", userRoute);
-app.use("api/v1/course", courseRoute);
+app.use("/api/v1/course", courseRoute);
 
 app.get("/api/v1/test", (req, res) => {
   return res.status(200).json({
