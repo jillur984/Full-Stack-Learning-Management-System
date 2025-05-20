@@ -54,15 +54,19 @@ const Navbar = () => {
     }
   }, [isSuccess]);
 
+  const role = "instructor";
+
   return (
     <div className="h-16 dark:bg-[#0A0A0A] bg-white border-b dark:border-gray-800 border-gray-200 fixed left-0 right-0 top-0 ">
       {/* Desktop mode */}
       <div className="max-w-7xl mx-auto hidden md:flex justify-between items-center gap-10 h-full">
         <div className="flex items-center gap-2">
           <School size={"30"} />
-          <h1 className="hidden md:block font-extrabold text-2xl">
-            E-Learning
-          </h1>
+          <Link to="/">
+            <h1 className="hidden md:block font-extrabold text-2xl">
+              E-Learning
+            </h1>
+          </Link>
         </div>
 
         {/* user icon and dark mode icon */}

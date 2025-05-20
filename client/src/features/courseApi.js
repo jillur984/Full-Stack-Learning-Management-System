@@ -18,6 +18,13 @@ export const courseApi = createApi({
       }),
       invalidatesTags: ["Refetch_Creator_Course"], // add korar sathe sathe jate ui te show kore
     }),
+
+    getPublishedCourse: builder.query({
+      query: () => ({
+        url: "/published-course",
+        method: "GET",
+      }),
+    }),
     getCreatorCourse: builder.query({
       query: () => ({
         url: "/",
@@ -68,17 +75,33 @@ export const courseApi = createApi({
       }),
     }),
     removeLecture: builder.mutation({
-      query: ({ lectureId }) => ({
+      query: (lectureId) => ({
         url: `/lecture/${lectureId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Refetch_Lecture"],
+    }),
+    getLectureById: builder.query({
+      query: (lectureId) => ({
+        url: `/lecture/${lectureId}`,
+        method: "GET",
+      }),
+    }),
+
+    // http://localhost:8080/api/v1/course/68197395ba4008085e6851d6?publish=true
+
+    publishCourse: builder.mutation({
+      query: ({ courseId, query }) => ({
+        url: `/${courseId}?publish=${query}`,
+        method: "PATCH",
+      }),
     }),
   }),
 });
 
 export const {
   useCreateCourseMutation,
+  useGetPublishedCourseQuery,
   useGetCreatorCourseQuery,
   useEditCourseMutation,
   useGetCourseByIdQuery,
@@ -86,4 +109,6 @@ export const {
   useGetCourseLectureQuery,
   useEditLectureMutation,
   useRemoveLectureMutation,
+  useGetLectureByIdQuery,
+  usePublishCourseMutation,
 } = courseApi;

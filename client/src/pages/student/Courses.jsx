@@ -1,10 +1,15 @@
 import React from "react";
 import Course from "./Course";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGetPublishedCourseQuery } from "@/features/courseApi";
 
 const Courses = () => {
-  const isLoading = false;
+  // const isLoading = false;
   const courses = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  const { data, isLoading, isSuccess, error } = useGetPublishedCourseQuery();
+
+  console.log(data);
   return (
     <div className="bg-gray-50">
       <div className="max-w-7xl mx-auto p-6">

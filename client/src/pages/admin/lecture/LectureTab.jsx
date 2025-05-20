@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import {
   useEditLectureMutation,
+  useGetLectureByIdQuery,
   useRemoveLectureMutation,
 } from "@/features/courseApi";
 import axios from "axios";
@@ -58,6 +59,20 @@ const LectureTab = () => {
     removeLecture,
     { data: removeData, isLoading: removeLoading, isSuccess: removeSuccess },
   ] = useRemoveLectureMutation();
+
+  const { data: lectureData } = useGetLectureByIdQuery(lectureId);
+
+  const lecture = lectureData?.lecture;
+  console.log(lecture);
+  console.log(lectureData);
+
+  useEffect(() => {
+    if (lecture) {
+      setLectureTitle(lecture.lectureTitle);
+      setIsFree(lecture.isPreviewFree);
+      setUploadVideoInfo(lecture.videoInfo);
+    }
+  }, [lecture]);
 
   const removeLectureHandler = async () => {
     await removeLecture(lectureId);
@@ -112,7 +127,7 @@ const LectureTab = () => {
         </div>
         <div className="flex items-center gap-2">
           <Button
-            disbaled={removeLoading}
+            disabled={removeLoading}
             variant="destructive"
             onClick={removeLectureHandler}
           >
